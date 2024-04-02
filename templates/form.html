@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <form action="{% url 'form' %}" method="post" enctype="multipart/form-data" id="form">
+        {% csrf_token %}
+        <div class="mb-5 mt-4">
+            <center>
+                <img src="../assets/img/logo.png" alt="" class="mb-3" width="190px" height="100px">
+                <h1>Welcome To School Guest Book</h1>
+                <h3>SMKN 17 JAKARTA</h3>
+            </center>
+        </div>
+        <div class="mb-3">
+            <label for="namaLengkap" class="form-label">Nama Lengkap <span class="text-danger">*</span> </label>
+            <input type="text" name="name" class="form-control" id="exampleInputEmail1" required>
+        </div>
+        <div class="mb-3">
+            <label for="jenisKelamin" class="form-label">Jenis Kelamin  <span class="text-danger">* </span> </label>
+            <select name="jenis_kelamin" id="" class="form-select" required>
+                <option value="Pria" selected> Pria </option>
+                <option value="Wanita"> Wanita </option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="kategoriDituju" class="form-label">Kategori yang Dituju <span class="text-danger">* </span> </label>
+            <select name="kategori_dituju" id="" class="form-select" required>
+                <option value="Kepala Sekolah" selected> Kepala Sekolah </option>
+                <option value="Guru"> Guru </option>
+                <option value="TU"> TU </option>
+                <option value="Siswa"> Siswa </option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Pihak Dituju <span class="text-danger">* </span> </label>
+            <input type="text" name="pihak_dituju" class="form-control" id="exampleInputEmail1" required>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Keperluan <span class="text-danger">* </span> </label>
+            <input type="text" name="keperluan" class="form-control" id="exampleInputEmail1" required>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">No HP <span class="text-danger">* </span> </label>
+            <input type="number" name="no_hp" class="form-control" id="no_hp" required>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Foto <span class="text-danger">* </span> </label>
+            <input type="file" accept="image/*" capture="camera" name="foto" class="form-control" id="foto" required>
+        </div>
+        <button class="btn btn-primary" id="confirmID">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('confirmID').addEventListener('click', function(e){
+        e.preventDefault();
+        var input = document.getElementById("no_hp").value;
+        if (input.length < 10) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No HP minimal harus 10 karakter!',
+            });
+            return false; // Prevent form submission
+        }
+            
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                Swal.fire("Saved!", "", "success");
+                document.getElementById('form').submit();
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+    });
+</script>
+{% endblock js %}
